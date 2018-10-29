@@ -1,63 +1,49 @@
 import React, { Component } from 'react';
-import DiaryEntry from './DiaryEntry';
+import axios from 'axios';
 
 export default class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      entries: [<DiaryEntry />], // TODO: this will be a json populated list
-      isTextArea: null,
-      isText: null,
-      onBoardingComplete: false,
+      entry: '',
+      sentiment: {
+        Sentiment: null,
+      },
     }
   }
 
-  addEntry = () => {
-    const entries = this.state.entries.concat(<DiaryEntry />)
-    this.setState({
-      entries,
+  processInput = async (e, operation) => {
+    e.preventDefault();
+    const {data} = await axios.post(`http://127.0.0.1:5000/${operation}`, {
+      data: this.state.entry
     });
-  }
-
-  handleOnboarding = (e) => {
     this.setState({
-      [e.target.name]: true, 
-      onBoardingComplete: !this.state.onBoardingComplete,
+      sentiment: data,
     })
   }
 
-  renderOnboarding = () => {
-    if (this.state.onBoardingComplete) return;
-    const titleMessage = `
-    Welcome to the Smart Diary™. Before we begin, do you prefer
-    to write in long form prose or short, bulleted lists?
-    `;
-    return (
-      <div>
-        <h1>{titleMessage}</h1>
-        <div>
-          <button
-            name='isTextArea'
-            onClick={this.handleOnboarding}>
-            Prose
-          </button>
-          <button
-            name='isText'
-            onClick={this.handleOnboarding}>
-            Bulleted Lists
-          </button>
-        </div>
-      </div>
-    )
+
+  handleInputChange = (e) => {
+    this.setState({
+      entry: e.target.value,
+    });
   }
 
-  render() {
+
+  render = () => {
     return (
       <div className="App">
-        {this.renderOnboarding()}
-        {this.state.onBoardingComplete && 
-          this.state.entries.map(entry => entry)
-        }
+        <h1>Welcome to your day</h1>
+        <textarea
+          onChange={this.handleInputChange}
+        />
+        <div>
+          <button onClick={(e) => this.processInput(e, 'sentiment')}>Get Sentiment</button>
+          <button onClick={(e) => this.processInput(e, 'keyPhrases')}>Get KeyPhrases</button>
+        </div>
+        <div>
+          <p>{this.state.sentiment.Sentiment}</p>
+        </div>
       </div>
     );
   }
