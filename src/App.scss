@@ -1,0 +1,42 @@
+.app__header {
+  text-align: center;
+}
+
+.app__button--container {
+  position: absolute;
+  width: 100%;
+}
+
+.app__button {
+  width: 50%;
+  height: 3vh;
+  border: 1px solid black;
+  border-radius: 0px;
+}
+
+.app__button--no-left-border {
+  border-left: 0px;
+}
+
+.app__container {
+  display: flex;
+  margin: 5px;
+  flex-direction: row;
+  flex-wrap: nowrap;
+}
+
+.app__container--left {
+  height: 100%;
+  flex: 1;
+}
+
+.app__container--right {
+  position: relative;
+  flex: 2;
+}
+
+.app__input {
+  border: 1px solid black;
+  width: 100%;
+  height: calc(100vh - 5vh);
+}
